@@ -48,11 +48,10 @@ def gravity_sim(planet):
         "sun": 274,
         }
 
-    gravity = planetGravity[planet]
-    pass
+    return planetGravity[planet]
 
 
-class sprite:
+class Sprite(object):
     """Fly that flips around.
 
     This fly is a interactable sprite, it is how the user plays the game
@@ -69,7 +68,7 @@ class sprite:
     """
 
     def __init__(self, x, y, vel, width, height):
-        """Inits SampleClass with blah."""
+        """Inits Sprites with all the values we need to draw/"""
         self.x = x
         self.y = y
         self.vel = vel
@@ -82,17 +81,21 @@ class sprite:
             P.draw.rect(screen, color, [self.x,self.y,self.width,self.height], 0)
         elif shape == 'circle':
             P.draw.circle(screen, color, [self.x, self.y, self.height], 0)
-    def move(self):
-        for event in P.event.get():
+    def move(self, event):
+       #print("frog")
+       #Mx, My = P.mouse.get_pos()
+        moved = False
+        while moved == False:
             if event.type == P.MOUSEBUTTONDOWN:
                 Mx, My = P.mouse.get_pos()
-                print(Mx)
-                if Mx < (SCREENWIDTH /2) and (self.x - self.vel) > SCREENWIDTH:
-                    self.x -= self.vel
-                    fly.draw(screen, rectangle, blue)
+                if Mx < (SCREENWIDTH / 2):
+                    print("less")
+                    return -1
                 else:
-                    self.x += self.vel
-                    fly.draw(screen, rectangle, blue)
+                    print("more")
+                    return 1
+                    
+
         
 
 

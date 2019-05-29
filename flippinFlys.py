@@ -25,42 +25,67 @@ screen = P.display.set_mode(SCREENSIZE)  # creates window and game screen
 P.display.set_caption("Flippin Flys")
 # set variables for some colours if you wnat them RGB (0-255)
 white = (255, 255, 255)
-black = (0, 0, 0)
+black = (255, 255, 255)
 red = (255, 0, 0)
 yellow = (255, 255, 0)
 green = (0, 255, 0)
-blue = (0, 0, 255)
+blue = (0, 0, 0)
 
 rectangle = 'rect'
+fly = Sprite(555,315,30,80,80)
+gravity = gravity_sim('earth')
+print(gravity)
+vertAcc = 0
+horAcc = 0
+jump = -16
 """
-x_fly = 600
-y_fly = 350
-vel_fly = 5
-width_fly = 90
-height_fly = 70
-fly = sprite(x_fly,y_fly,vel_fly,width_fly,height_fly)
+provides a buffer that prevents the game starting before the first mouse click
+this allows me to resize the screen appropriately before users begin, may be
+removed at a later version of the code
 """
-
-fly = sprite(555,315,5,90,70)
-play = True  # controls whether to keep playing
-
+play = False
+while play != True:
+    for event in P.event.get():
+        if event.type == P.MOUSEBUTTONDOWN:
+            play = True
 # game loop - runs loopRate times a second!
 while play:  # game loop - note:  everything in this loop is indented one tab
-
-    for event in P.event.get():  # get user interaction events
-        if event.type == P.QUIT:  # tests if window's X (close) has been clicked
+    vertAcc += gravity / 10
+    fly.y += gravity / 10
+    if horAcc < 0:
+        horAcc += 6
+    elif horAcc > 0:
+        horAcc -= 6
+    if vertAcc == 0:
+        fly.x += horAcc
+    fly.y += vertAcc
+    screen.fill(black)
+    fly.draw(screen, rectangle, blue)
+    fly.x += horAcc
+    fly.draw(screen, rectangle, blue)
+    
+    for event in P.event.get():# get user interaction events
+        if event.type == P.QUIT: # tests if window's X (close) has been clicked
             play = False  # causes exit of game loop
         
         # your code starts here #
+        fly.draw(screen, rectangle, blue)
         if event.type == P.MOUSEBUTTONDOWN: #includes touching screen
-            fly.draw(screen, rectangle, blue)
-            print("frog")
-            Mx, My = P.mouse.get_pos()
-            print(Mx)
-            fly.move()
+            vertAcc = -16
+            screen.fill(black)
+            """
+            for n in range(0,540):
+                fly.draw(screen, rectangle, blue)
+                fly.y -= 0.4
+            """
+            direction = fly.move(event)
+            if direction == -1:
+                horAcc -= fly.vel
+            else:
+                horAcc += fly.vel
             # change this to do something if user clicks mouse
             # or touches screen
-            pass 
+
         
 
 
