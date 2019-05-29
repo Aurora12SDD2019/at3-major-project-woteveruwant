@@ -62,20 +62,28 @@ class GameRun():
 
     def __init__(self):
         """Inits variables required to run game loop"""
-        self.score = 10
-       
+        self.score = 0
+        self.points = 0
 
-    def death(self):
+    def death(self, x, y, width, height):
         """Performs death sequence"""
+        if x < 0 or x > (SCREENWIDTH - width):
+            self.highScore()
+            return False
+        elif y < 0 or y > (SCREENHEIGHT - height):
+            self.highScore()
+            return False
+        else:
+            return True
 
     def contact(self):
         """Checks to see if player has contact with any death surfaces
             if so calls the death function to end the game"""
-    def score(self):
+    def scoring(self):
         """Updates score throughout play"""
-        points = 0
-        points += 1
-        if points == 180:
+        self.points += 1
+        if self.points == 180:
+            self.points = 0
             self.score += 1
             print(self.score)
         
@@ -83,16 +91,17 @@ class GameRun():
         """Checks if high score has been beaten or not"""
         scoreCard = open('highScore.txt', 'r')
         prevHighScore = scoreCard.read()
-        print(prevHighScore)
         prevHighScore = int(prevHighScore)
-        print(type(prevHighScore))
         scoreCard.close()
         if self.score > prevHighScore:
             highScore = self.score
             scoreCard = open('highScore.txt', 'w+')
             scoreCard.write(str(highScore))
+            print(highScore)
         else:
             highScore = prevHighScore
+            print(self.score)
+            print(prevHighScore)
         
 
 class Sprite(object):

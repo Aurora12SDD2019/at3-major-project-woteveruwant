@@ -50,7 +50,8 @@ while play != True:
             play = True
 # game loop - runs loopRate times a second!
 while play:  # game loop - note:  everything in this loop is indented one tab
-    gr.score()
+    play = gr.death(fly.x, fly.y, fly.width, fly.height)
+    gr.scoring()
     vertAcc += gravity / 10
     fly.y += gravity / 10
     if horAcc < 0:
