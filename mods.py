@@ -50,6 +50,50 @@ def gravity_sim(planet):
 
     return planetGravity[planet]
 
+class GameRun():
+    """Controls the game sequence.
+
+    Controls scoring, start and end of the game. 
+
+    Attributes:
+        likes_spam: A boolean indicating if we like SPAM or not.
+        eggs: An integer count of the eggs we have laid.
+    """
+
+    def __init__(self):
+        """Inits variables required to run game loop"""
+        self.score = 10
+       
+
+    def death(self):
+        """Performs death sequence"""
+
+    def contact(self):
+        """Checks to see if player has contact with any death surfaces
+            if so calls the death function to end the game"""
+    def score(self):
+        """Updates score throughout play"""
+        points = 0
+        points += 1
+        if points == 180:
+            self.score += 1
+            print(self.score)
+        
+    def highScore(self):
+        """Checks if high score has been beaten or not"""
+        scoreCard = open('highScore.txt', 'r')
+        prevHighScore = scoreCard.read()
+        print(prevHighScore)
+        prevHighScore = int(prevHighScore)
+        print(type(prevHighScore))
+        scoreCard.close()
+        if self.score > prevHighScore:
+            highScore = self.score
+            scoreCard = open('highScore.txt', 'w+')
+            scoreCard.write(str(highScore))
+        else:
+            highScore = prevHighScore
+        
 
 class Sprite(object):
     """Fly that flips around.

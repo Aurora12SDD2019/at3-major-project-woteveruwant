@@ -32,32 +32,31 @@ green = (0, 255, 0)
 blue = (0, 0, 0)
 
 rectangle = 'rect'
-fly = Sprite(555,315,30,80,80)
+fly = Sprite(555,315,25,80,80)
 gravity = gravity_sim('earth')
-print(gravity)
 vertAcc = 0
 horAcc = 0
-jump = -16
+gr = GameRun()
 """
 provides a buffer that prevents the game starting before the first mouse click
 this allows me to resize the screen appropriately before users begin, may be
 removed at a later version of the code
 """
 play = False
+gr.highScore()
 while play != True:
     for event in P.event.get():
         if event.type == P.MOUSEBUTTONDOWN:
             play = True
 # game loop - runs loopRate times a second!
 while play:  # game loop - note:  everything in this loop is indented one tab
+    gr.score()
     vertAcc += gravity / 10
     fly.y += gravity / 10
     if horAcc < 0:
-        horAcc += 6
+        horAcc += fly.vel / 20
     elif horAcc > 0:
-        horAcc -= 6
-    if vertAcc == 0:
-        fly.x += horAcc
+        horAcc -= fly.vel / 20
     fly.y += vertAcc
     screen.fill(black)
     fly.draw(screen, rectangle, blue)
@@ -71,7 +70,7 @@ while play:  # game loop - note:  everything in this loop is indented one tab
         # your code starts here #
         fly.draw(screen, rectangle, blue)
         if event.type == P.MOUSEBUTTONDOWN: #includes touching screen
-            vertAcc = -16
+            vertAcc = -1.6 * gravity
             screen.fill(black)
             """
             for n in range(0,540):
