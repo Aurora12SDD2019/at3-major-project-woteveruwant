@@ -22,8 +22,13 @@ import pygame as P
 import random as R
 import sys
 import time as T
-#modules
 
+#variables
+P.init()
+font1 = P.font.SysFont('Arial Black', 70)
+font2 = P.font.SysFont('Arial Black', 179)
+scoreFont = P.font.SysFont('Arial Black', 50)
+#modules
 def gravity_sim(planet):
     """Simulates gravity in the environment
 
@@ -102,6 +107,17 @@ class GameRun():
             self.points = 0
             self.score += 1
             print(self.score)
+            
+    def displayScore(self, screen):
+        currentScore = str(self.score)
+        #currentScore = "11"
+        playerScore = scoreFont.render(currentScore, True, (0,0,0))
+        textBox = playerScore.get_rect()
+        textBox.x = (SCREENWIDTH / 2) - (textBox.width / 2)
+        screen.blit(playerScore,textBox)
+        P.display.flip()
+        #print("displayScore ran")
+        #print(currentScore)
         
     def highScore(self):
         """Checks if high score has been beaten or not"""
@@ -118,6 +134,66 @@ class GameRun():
             highScore = prevHighScore
             print(self.score)
             print(prevHighScore)
+        return highScore
+
+def Hitbox(x, y, width, height):
+    """Does something amazing.
+
+    a much longer description of the really amazing stuff this function does and how it does it.
+
+    Args:
+        x: the current x location of an object
+        y: the current y location of an object
+        width: how wide the object is
+        height: how high the object is
+        
+    Returns:
+        xRange: the range of x values the object is present at
+        yRange: the range of y values the object is present at
+    """
+    xRange = []
+    yRange = []
+    x = int(x)
+    y = int(y)
+    for val in range(x, (width+x)):
+        xRange.append(val)
+    for val in range(y, (width+y)):
+        yRange.append(val)
+    return xRange, yRange
+
+def Collide(obj1XRange, obj1YRange, obj2XRange, obj2YRange):
+    """Does something amazing.
+
+    a much longer description of the really amazing stuff this function does and how it does it.
+
+    Args:
+        obj1XRange: range of X values object 1 is present at
+        obj1XRange: range of Y values object 1 is present at
+        obj2XRange: range of X values object 2 is present at
+        obj2YRange: range of Y values object 2 is present at
+
+    Returns:
+        description of the stuff that is returned by the function.
+
+    Raises:
+        AnError: An error occurred running this function.
+    """
+    xCollide = False
+    for val in obj1XRange:
+        for i in obj2XRange:
+            if i == val:
+                xCollide = True
+                pass
+    yCollide = False
+    for val in obj1YRange:
+        for i in obj2YRange:
+            if i == val:
+                yCollide = True
+                pass
+    if xCollide == True and yCollide == True:
+        return True
+    else:
+        return False
         
 class Button(object):
     """Summary of class here.
@@ -217,8 +293,7 @@ def mainLoop(screen, SCREENWIDTH, SCREENHEIGHT):
     green = (0, 255, 0)
     blue = (0, 0, 0)
 
-    rectangle = 'rect'
-    fly = Sprite(555,315,25,80,80,screen, rectangle, blue)
+    fly = Sprite(555,315,25,80,80,screen, 'rect', blue)
     gravity = gravity_sim('earth')
     vertAcc = 0
     horAcc = 0
@@ -247,8 +322,10 @@ def mainLoop(screen, SCREENWIDTH, SCREENHEIGHT):
     # game loop - runs loopRate times a second!
     while play:  # game loop - note:  everything in this loop is indented one tab
         play = gr.WallContact(fly.x, fly.y, fly.width, fly.height)
+        flyXRange, flyYRange = Hitbox(fly.x, fly.y, fly.width, fly.height)
+        gr.displayScore(screen)
         if play == False:
-            gr.GameOver()
+            gameOver(screen)
     
         spawn = gr.enemies()
         if spawn == 1:
@@ -261,6 +338,10 @@ def mainLoop(screen, SCREENWIDTH, SCREENHEIGHT):
         for i in range(0, key):
             if enemies[i].y < SCREENHEIGHT:
                 enemies[i].fall(gravity, 0)
+                bgXRange, bgYRange = Hitbox(enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height)
+                collision = Collide(bgXRange, bgYRange, flyXRange, flyYRange)
+                if collision == True:
+                    gameOver(screen)
         fly.fall(gravity, vertAcc)
         gr.scoring()
         if horAcc < 0:
@@ -292,17 +373,38 @@ def mainLoop(screen, SCREENWIDTH, SCREENHEIGHT):
         clock.tick(loopRate)  # limits game to frame per second, FPS value
         
 def gameOver(screen):
+    gr = GameRun(screen)
+    topScore = gr.highScore()
+    topScore = "HIGHSCORE: " + str(topScore)
     while True:
-        screen.fill((0,255,0))
+        #displaying game over
+        screen.fill((255,255,255))
+        gameOver = font2.render("GAME OVER", True, (0,0,0))
+        textBox = gameOver.get_rect()
+        screen.blit(gameOver,textBox)
+        
+        #displaying high score
+        displayTopScore = scoreFont.render(topScore, True, (0,0,0))
+        textBox = displayTopScore.get_rect()
+        textBox.y = (SCREENHEIGHT / 2) - (textBox.height / 2)
+        textBox.x = (SCREENWIDTH / 2) - (textBox.width / 2)
+        screen.blit(displayTopScore,textBox)
+
+        #displaying player score
+        
         P.display.flip()
         for event in P.event.get():
             if event.type == P.QUIT:
                 P.quit()
                 sys.exit()
 
-def gameStart(screen):
+def gameStart(screen, char):
     while True:
-        screen.fill((0,0,255))
+        pressToStart = font1.render("PRESS ANYWHERE TO BEGIN...", True, (0,0,0))
+        textBox = pressToStart.get_rect()
+        screen.fill((255,255,255))
+        char.draw()
+        screen.blit(pressToStart,textBox)
         P.display.flip()
         for event in P.event.get():
             if event.type == P.QUIT:
