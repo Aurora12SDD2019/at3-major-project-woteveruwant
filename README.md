@@ -1,6 +1,3 @@
-# AT3_MajorProject
+# Flippin Fly's (TBD)
 
-Use this repository to store all your documents, code and media assiciated with your major project.
-You should also use the project tools to plan the project.
-I recommend you use the wiki tool for your documents such as User Manual, Data dictionary, Structure chart, Test reports etc.
-Once you start your project you should replace the text of this file with a description of your project and its current status.
+Flippin Fly's is a game where the player controls a fly which is actually just a black box. It has a monochromatic colour scheme to attempt to fit into as many cafe's as possible. This way it is stylish, trendy and modern. The asthetic can easily be modified if needed. Currently it is in wokring condition, there are some visual display errors and some functionalities that aren't being harnessed by the game in its current state, for example the ability to change the difficulty by playing on different planets thus having a different gravity. One feature yet to be added is the replay button on the game over screen. I then want to develop an installer so it can be used on any system regardless of if it has python installed or not.
