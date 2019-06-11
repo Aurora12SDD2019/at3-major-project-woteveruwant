@@ -1,5 +1,0 @@
-Came up with the concept idea today, looking to create a game where the player is a fly avoiding different obstacles,
-such as a fly swat, birds and lizards.
-
-I started work on the design brief to prepare it for my next meeting with the client. 
-I also configured my file storage and my git hub.
