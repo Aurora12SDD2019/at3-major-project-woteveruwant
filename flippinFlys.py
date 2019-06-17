@@ -6,9 +6,9 @@ It has a seperate file for all of its modules.
 
 __author__ = "Tynan Matthews"
 __license__ = "GPL"
-__version__ = "0.0.2"
+__version__ = "0.1.1"
 __email__ = "tynan.matthews@education.nsw.gov.au"
-__status__ = "Alpha"
+__status__ = "Beta"
 
 #dependencies
 import pygame as P # accesses pygame files
@@ -22,7 +22,7 @@ clock = P.time.Clock()  # creates clock to limit frames per second
 loopRate = 60  # sets max speed of main loop
 SCREENSIZE = SCREENWIDTH, SCREENHEIGHT = 1200, 700  # sets size of screen/window
 screen = P.display.set_mode(SCREENSIZE)  # creates window and game screen
-P.display.set_caption("Archi")
+P.display.set_caption("Flippin Fly's")
 basicFont = P.font.SysFont(None, 48)
 
 play = True
