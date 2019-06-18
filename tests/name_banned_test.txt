@@ -1,0 +1,9 @@
+name	expected
+tynan	False
+Tynan	False
+killthegays	True
+tosser	True
+ballsackking	True
+mister42	"You cant use numbers"
+labiaSlayer420	True
+s h i t	True
