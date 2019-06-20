@@ -336,8 +336,8 @@ def mainLoop(screen, SCREENWIDTH, SCREENHEIGHT):
 
     fly = Sprite(555,315,25,80,80,screen, 'rect', blue) #using the sprite function to create the player character
     gravity = gravity_sim('earth') #using the gravity_sim function to set the gravity
-    vertAcc = 0
-    horAcc = 0
+    vertAcc = 0.0
+    horAcc = 0.0
     key = 0
     enemies = [] #a list containing all active enemies at any given time
     gr = GameRun(screen) #initiates game run as gr and telling it which screen to use
@@ -349,7 +349,7 @@ def mainLoop(screen, SCREENWIDTH, SCREENHEIGHT):
     play = True
     # game loop - runs loopRate times a second!
     while play:  # game loop - note:  everything in this loop is indented one tab
-        play = gr.WallContact(fly.x, fly.y, fly.width, fly.height)
+        play = gr.WallContact(fly.x, fly.y, fly.width, fly.height) #play = false if player is touching wall
         flyXRange, flyYRange = Hitbox(fly.x, fly.y, fly.width, fly.height)
         global playerScore
         if play == False:
@@ -496,6 +496,108 @@ def gameStart(screen, char):
                 sys.exit()
             elif event.type == P.MOUSEBUTTONDOWN:
                 mainLoop(screen, SCREENWIDTH, SCREENHEIGHT)
+
+class LeaderBoard(object):
+    """Leader Board to hold top scores and names.
+
+    
+    Attributes:
+        leaders: An array of the leaders.
+        leader_file: file containing the leader board data
+    
+    """
+
+    def __init__(self):
+        """Inits the leader doard with data from the file."""
+        self.leaders = []
+        try:
+            leader_file = open('media\leader_board.txt', 'r')
+            in_leaders = leader_file.readlines() #read the file
+            leader_file.close() #always good practice to close the file ASAP
+            
+            for l in in_leaders:
+                l = l.split(",")
+                #change scores to int and strip EOL characters of names
+                self.leaders.append([int(l[0]), l[1].strip()])
+            # print(self.leaders)
+        except FileNotFoundError:
+            pass #we will create the file later
+
+    def check(self, score): #not currently in use with current design
+        #if you want this added to program consult at next meeting and it will be arranged
+        """checks to see if new score makes it on leader board.
+        
+        Args:
+        score: the first argument required by the function.
+
+        Returns:
+            True if score needs to go on leader board, or False
+        """
+        
+        new_leader = False
+        if len(self.leaders) < 10:
+            new_leader = True
+            
+        for l in self.leaders:
+            if score >= l[0]:
+                new_leader = True
+        
+        return new_leader
+        
+        
+    def update(self, score):
+        """add a new leader and score on leader board.
+
+        Adds a new leader to the leader board. Write the new leaderboard file
+        TODO check names to see if they are nice
+        
+        Args:
+        score: the first argument required by the function.
+
+        Returns:
+            True if score needs ot go on leader board, or false
+        """
+        player_name = input('Please enter your player name: ')
+        banned = self.name_banned(player_name)
+        while banned == True:
+            player_name = input("You can't write that! Try again and be nice: ")
+            banned = self.name_banned(player_name)
+        
+            
+        self.leaders.append([score, player_name])
+        self.leaders.sort(reverse=True) #sort in descending order
+        if len(self.leaders) > 10:
+            self.leaders.pop()
+
+        leader_file = open('media\leader_board.txt', 'w+')
+        for l in self.leaders:
+            leader_file.write("{},{}\n".format(l[0], l[1]))
+        leader_file.close() #always good practice to close the file ASAP
+
+
+    def name_banned(self, name):
+        """checks to see if name is on banned list.
+        
+        Args:
+        name: the word to test.
+
+        Returns:
+            banned: True if word is banned, or False
+        """
+        
+        banned = False
+        banned_file = open('media\swear_words.txt', 'r')
+        banned_words = banned_file.readlines()
+        banned_file.close() #always good practice to close the file ASAP
+        
+        for b in banned_words:
+            b = b.strip()
+            if b in name:
+                banned = True
+                
+        return banned
+
+
 # templates
 def function_name(arg1, arg2, other_silly_variable=None):
     """Does something amazing.
