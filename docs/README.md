@@ -1,11 +1,14 @@
 # Documents
 
-Use this folder to store all your documents that are not in the wiki
+Here are all my documents not found in my wiki!
 
-As you add documents edit this README.md file so that it lists and describes the documents you have stored here.
+They are here either because they aren't appropriate for the wiki aka not public knowledge or because I couldnt figure out how to put a table on the wiki...
 
-* document 1
-  * description
+* meetingNotes
+  * this folder contains any notes from meetings had with the client
   
-* document 2
-  * descriptipon
+* dataDictionary.docx
+  * A table listing the variables and their correct formats / descriptions from the mainLoop function
+
+* designBrief.pptx
+  * A design brief including all of the important information for our client, entitling what we are doing our work agreement and also the license agreement for this project
